@@ -51,13 +51,11 @@ df = df[['headline.main', 'pub_date', 'byline.original', 'web_url']]
 df.columns = ['headline', 'date', 'author', 'url']
 df.date = pd.to_datetime(df['date'], errors='coerce')
 
-# print(df.info())
-# print(df.columns)
-
 new_df = df.reindex(columns=['url', 'headline','date','author'])
-# print(new_df)
 
-
+username = '***'
+password = '***'
+database = 'little_etl'
 
 database_loc = f"postgresql://{username}:{password}@localhost:5432/{database}"
 engine = create_engine(database_loc)
