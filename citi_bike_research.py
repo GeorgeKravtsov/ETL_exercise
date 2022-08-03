@@ -38,9 +38,38 @@ def deal_with_postgres(username, password, sql_query, db_name=None):
 
 username = '***'
 password = '***'
-sql_query = 'CREATE DATABASE citi_bike_research'
+create_db_query = 'CREATE DATABASE citi_bike_research;'
 
-deal_with_postgres(username=username, password=password, sql_query=sql_query)
+deal_with_postgres(username=username,
+        password=password,
+        sql_query=create_db_query)
+
+create_table_query = 'CREATE TABLE IF NOT EXISTS january2022 ( \
+                ride_id VARCHAR(16) PRIMARY KEY NOT NULL, \
+                rideable_type VARCHAR(13), \
+                started_at TIMESTAMP, \
+                ended_at TIMESTAMP, \
+                start_station_name VARCHAR(44), \
+                start_station_id VARCHAR(5), \
+                end_station_name VARCHAR(44), \
+                end_station_id VARCHAR(7), \
+                start_lat NUMERIC, \
+                start_lng NUMERIC, \
+                end_lat NUMERIC, \
+                end_lng NUMERIC, \
+                member_casual VARCHAR(6), \
+                trip_duration INTERVAL, \
+                distance_km NUMERIC, \
+                avg_speed_kmh NUMERIC \
+            );'
+
+deal_with_postgres(username=username,
+        password=password,
+        sql_query=create_table_query,
+        db_name='citi_bike_research')
 
 engine = create_engine(f"postgresql://{username}:{password}@localhost:5432/citi_bike_research")
-df.to_sql('january2022', engine)
+df.to_sql(name='january2022',
+        con=engine,
+        index=False,
+        if_exists='append')
