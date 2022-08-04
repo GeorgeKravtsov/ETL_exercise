@@ -25,6 +25,7 @@ def speed_eval(row):
 
 df['distance_km'] = df.apply(lambda row: distance_eval(row), axis=1)
 df['avg_speed_kmh'] = df.apply(lambda row: speed_eval(row), axis=1)
+df.to_csv('january2022.csv', sep=',', index=False)
 df['trip_duration'] = df['trip_duration'].astype(str) # to save timedelta in postgres; postgres converts timedelta to integer
 
 def deal_with_postgres(username, password, sql_query, db_name=None):
