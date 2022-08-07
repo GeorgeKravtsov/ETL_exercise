@@ -14,12 +14,12 @@ default_args = {
     'depends_on_past': False,
 }
 
-def distance_eval(row):
+def distance_calc(row):
         start = Point(row['start_lat'], row['start_lng'])
         stop = Point(row['end_lat'], row['end_lng'])
         return distance(start, stop).km
 
-def speed_eval(row):
+def speed_calc(row):
     if row.distance_km != 0 and row.trip_duration != 0:
         return row.distance_km / (float(row.trip_duration.total_seconds()) / 3600)
     else:
@@ -27,17 +27,17 @@ def speed_eval(row):
 
     
 def create_dataframe():
-    df = pd.read_csv('/absolute_path/202206-citibike-tripdata.csv', delimiter=',')
+    df = pd.read_csv('/absolute_path/dags/202206-citibike-tripdata.csv', delimiter=',')
     df = df.dropna().drop_duplicates()
     df['started_at'] = pd.to_datetime(df['started_at'], errors='coerce')
     df['ended_at'] = pd.to_datetime(df['ended_at'], errors='coerce')
     df['trip_duration'] = df.apply(lambda row: row.ended_at - row.started_at, axis=1)
-    df['distance_km'] = df.apply(lambda row: distance_eval(row), axis=1)
-    df['avg_speed_kmh'] = df.apply(lambda row: speed_eval(row), axis=1)
+    df['distance_km'] = df.apply(lambda row: distance_calc(row), axis=1)
+    df['avg_speed_kmh'] = df.apply(lambda row: speed_calc(row), axis=1)
     df.to_csv('/absolute_path/june2022.csv', sep=',', index=False)
     df['trip_duration'] = df['trip_duration'].astype(str)
 
-    def deal_with_postgres(username, password, sql_query, db_name=None):
+    def interact_with_postgres(username, password, sql_query, db_name=None):
         database_loc = f"postgresql://{username}:{password}@localhost:5432"
         if db_name:
             database_loc += '/' + db_name
@@ -68,7 +68,7 @@ def create_dataframe():
                 avg_speed_kmh NUMERIC \
             );'
 
-    deal_with_postgres(username=username,
+    interact_with_postgres(username=username,
         password=password,
         sql_query=create_table_query,
         db_name='citi_bike_research')
