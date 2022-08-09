@@ -7,6 +7,8 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
 
+"""This is an example of ETL-pipeline using open data from https://s3.amazonaws.com/tripdata/index.html
+Description of this data you can find here: https://ride.citibikenyc.com/system-data"""
 
 default_args = {
     'owner': 'airflow',

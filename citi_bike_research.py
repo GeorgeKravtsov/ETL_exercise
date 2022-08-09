@@ -3,6 +3,8 @@ from geopy.distance import distance
 from geopy import Point
 from sqlalchemy import create_engine
 
+"""This is an example of ETL-pipeline using open data from https://s3.amazonaws.com/tripdata/index.html
+Description of this data you can find here: https://ride.citibikenyc.com/system-data"""
 
 df = pd.read_csv('202201-citibike-tripdata.csv', delimiter=',')
 

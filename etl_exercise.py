@@ -1,12 +1,12 @@
-from cgitb import reset
 from urllib import response
 import requests
-import json
 import pandas as pd
 from pandas import json_normalize
 from sqlalchemy import create_engine
 import time
 import datetime
+
+"""This is an example of ETL-pipline receiving data from API of New York Times"""
 
 def get_URL(query:str, page_num:str, date:str, API_KEY:str) -> str:
     URL = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?q={query}'
@@ -18,7 +18,7 @@ df = pd.DataFrame()
 
 current_date = datetime.date(2020, 8,29)
 page_num = 1
-
+API_KEY = '***'
 
 while True:
     URL = get_URL(query='COVID-19', page_num=str(page_num), date=current_date, API_KEY=API_KEY)

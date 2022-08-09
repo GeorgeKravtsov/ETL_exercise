@@ -4,6 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 
+"""This is an example of ETL-pipeline that loads csv file into PostgreSQL"""
 
 default_args = {
     'owner':'airflow',
